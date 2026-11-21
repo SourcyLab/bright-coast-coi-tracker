@@ -1,0 +1,10 @@
+{
+  "name": "coi-deadline-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test"
+  }
+}

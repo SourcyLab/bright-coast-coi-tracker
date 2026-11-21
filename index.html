@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' file:; style-src 'self' file:; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+  <meta name="color-scheme" content="light dark">
+  <title>COI Deadline Tracker</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="src/dates.js"></script>
+  <script defer src="src/roster.js"></script>
+  <script defer src="src/csv.js"></script>
+  <script defer src="src/calendar.js"></script>
+  <script defer src="src/i18n.js"></script>
+  <script defer src="src/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#content" data-t="skip">Skip to main content</a>
+  <header class="masthead">
+    <div class="shell masthead-inner">
+      <div>
+        <h1 data-t="title">COI Deadline Tracker</h1>
+        <p data-t="intro">Track subcontractor certificate requests and deadlines across your Florida jobs.</p>
+      </div>
+      <div class="language">
+        <label for="language" data-t="language">Language</label>
+        <select id="language" name="language">
+          <option value="en" lang="en">English</option>
+          <option value="es" lang="es">Español</option>
+        </select>
+      </div>
+    </div>
+  </header>
+  <noscript><p class="shell">Enable JavaScript to use the tracker. <span lang="es">Active JavaScript para usar el registro.</span></p></noscript>
+  <main id="content" class="shell" tabindex="-1" hidden>
+    <section>
+      <div class="section-heading">
+        <div>
+          <h2 data-t="summary"></h2>
+          <p class="muted" data-t="summaryNote"></p>
+        </div>
+        <div class="field number">
+          <label for="lookahead" data-t="lookahead"></label>
+          <input id="lookahead" name="lookahead" type="number" min="0" max="3650" step="1" value="30" required aria-invalid="false" data-error="lookahead-error">
+          <span id="lookahead-error" class="error" hidden data-t="daysError"></span>
+        </div>
+      </div>
+      <dl id="metrics" class="metrics"></dl>
+    </section>
+
+    <section id="roster" class="panel">
+      <div class="section-heading panel-heading">
+        <h2 data-t="roster"></h2>
+        <div class="buttons">
+          <button id="open-import" type="button" data-t="importCsv"></button>
+          <button id="add" type="button" class="primary" data-t="add"></button>
+        </div>
+      </div>
+      <search class="filters">
+        <div class="field">
+          <label for="search" data-t="search"></label>
+          <input id="search" name="search" type="search" autocomplete="off" data-placeholder="searchHint">
+        </div>
+        <div class="field">
+          <label for="filter" data-t="filter"></label>
+          <select id="filter" name="filter"></select>
+        </div>
+      </search>
+      <p id="shown" class="table-meta muted"></p>
+      <p id="results-status" class="sr-only" role="status" aria-atomic="true"></p>
+      <p id="scroll-hint" class="table-meta muted" data-t="scroll" hidden></p>
+      <div id="table-scroll" class="table-scroll" role="region" aria-labelledby="roster-caption" aria-describedby="scroll-hint" tabindex="0" hidden>
+        <table>
+          <caption id="roster-caption" class="sr-only" data-t="roster"></caption>
+          <thead><tr id="columns"></tr></thead>
+          <tbody id="entries"></tbody>
+        </table>
+      </div>
+      <div id="empty" class="empty">
+        <h3 id="empty-title"></h3>
+        <p id="empty-help" class="muted" data-t="emptyHelp"></p>
+      </div>
+      <div class="panel-foot"><p class="muted" data-t="disclaimer"></p></div>
+    </section>
+    <p class="optional"><a href="https://brightcoastins.com/get-a-quote?utm_source=github&amp;utm_medium=open-source&amp;utm_campaign=coi-tracker&amp;utm_content=results-cta" rel="noopener" target="_blank" data-t="cta"></a></p>
+
+    <section class="panel utility">
+      <h2 data-t="data"></h2>
+      <p id="privacy" class="muted" data-t="privacy"></p>
+      <div class="check">
+        <input id="remember" name="remember" type="checkbox" autocomplete="off" aria-describedby="privacy storage-error">
+        <label for="remember" data-t="storage"></label>
+      </div>
+      <p id="storage-error" class="error feedback" role="status" aria-atomic="true"></p>
+      <div class="buttons">
+        <button id="export-csv" type="button" data-t="exportCsv"></button>
+        <a class="button" href="fixtures/sample-roster.csv" download="sample-roster.csv" data-t="sample"></a>
+        <button id="clear" type="button" class="danger" data-t="clear"></button>
+      </div>
+      <details class="calendar">
+        <summary data-t="calendar"></summary>
+        <p class="muted" data-t="icsNote"></p>
+        <div class="check">
+          <input id="include-requests" name="include-requests" type="checkbox" aria-controls="lead-field">
+          <label for="include-requests" data-t="includeRequests"></label>
+        </div>
+        <div id="lead-field" class="field number" hidden>
+          <label for="lead-days" data-t="leadDays"></label>
+          <input id="lead-days" name="lead-days" type="number" min="0" max="3650" step="1" value="7" required aria-invalid="false" data-error="lead-error">
+          <span id="lead-error" class="error" hidden data-t="daysError"></span>
+        </div>
+        <button id="export-ics" type="button" data-t="exportIcs"></button>
+      </details>
+      <p id="data-status" class="feedback" role="status" aria-atomic="true"></p>
+    </section>
+
+    <section id="checklist-section" class="panel utility">
+      <h2 data-t="checklist"></h2>
+      <ul id="checklist"></ul>
+      <div class="buttons">
+        <button id="copy" type="button" data-t="copy"></button>
+        <button id="print" type="button" data-t="print"></button>
+      </div>
+      <p id="checklist-status" class="feedback" role="status" aria-atomic="true"></p>
+    </section>
+  </main>
+  <footer class="shell footer"><p data-t="footer"></p></footer>
+
+  <dialog id="editor" aria-labelledby="editor-title">
+    <h2 id="editor-title"></h2>
+    <form id="entry-form" aria-labelledby="editor-title" method="dialog" autocomplete="off" novalidate>
+      <div class="editor-fields">
+        <div class="field">
+          <label for="subcontractor" data-t="requiredLabel"></label>
+          <input id="subcontractor" name="subcontractor" required aria-invalid="false" data-error="name-error" autofocus>
+          <span class="error" id="name-error" data-t="requiredName" hidden></span>
+        </div>
+        <div class="field">
+          <label for="trade" data-t="trade"></label><input id="trade" name="trade">
+        </div>
+        <div class="field">
+          <label for="contact" data-t="optionalContact"></label><input id="contact" name="contact" spellcheck="false">
+        </div>
+        <div class="field">
+          <label for="job_name" data-t="job_name"></label><input id="job_name" name="job_name">
+        </div>
+        <p id="date-hint" class="muted wide" data-t="dateHint"></p>
+        <div class="field">
+          <label for="job_start" data-t="job_start"></label>
+          <input id="job_start" name="job_start" aria-describedby="date-hint" aria-invalid="false" data-error="start-error" autocapitalize="off" spellcheck="false" dir="ltr">
+          <span class="error" id="start-error" data-t="dateError" hidden></span>
+        </div>
+        <div class="field">
+          <label for="coi_expiry" data-t="coi_expiry"></label>
+          <input id="coi_expiry" name="coi_expiry" aria-describedby="date-hint" aria-invalid="false" data-error="expiry-error" autocapitalize="off" spellcheck="false" dir="ltr">
+          <span class="error" id="expiry-error" data-t="dateError" hidden></span>
+        </div>
+        <div class="field wide">
+          <label for="request_status" data-t="request_status"></label><select id="request_status" name="request_status"></select>
+        </div>
+        <div class="field wide">
+          <label for="notes" data-t="notes"></label><textarea id="notes" name="notes" rows="3"></textarea>
+        </div>
+      </div>
+      <p id="editor-status" class="sr-only" role="status" aria-atomic="true"></p>
+      <div class="buttons dialog-actions">
+        <button type="submit" class="primary" data-t="save"></button>
+        <button id="cancel-edit" type="button" data-t="cancel"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="importer" aria-labelledby="import-title">
+    <h2 id="import-title" data-t="importCsv"></h2>
+    <p class="muted" data-t="csvIntro"></p>
+    <form id="file-form" aria-labelledby="csv-file-label" method="dialog" novalidate>
+      <div class="field">
+        <label id="csv-file-label" for="csv-file" data-t="csvFile"></label>
+        <input id="csv-file" name="csv-file" type="file" accept=".csv,text/csv" required aria-invalid="false" data-error="file-error" autofocus>
+        <span class="error" id="file-error" data-t="importBlankFile" hidden></span>
+      </div>
+      <button type="submit" data-t="importFile"></button>
+    </form>
+    <form id="paste-form" aria-labelledby="csv-text-label" method="dialog" autocomplete="off" novalidate>
+      <div class="field">
+        <label id="csv-text-label" for="csv-text" data-t="csvPaste"></label>
+        <textarea id="csv-text" name="csv-text" rows="4" required aria-invalid="false" data-error="paste-error" spellcheck="false" dir="ltr"></textarea>
+        <span class="error" id="paste-error" data-t="importBlankText" hidden></span>
+      </div>
+      <button type="submit" data-t="importText"></button>
+    </form>
+    <div id="report" class="report" hidden>
+      <h3 data-t="importReport"></h3>
+      <p id="import-count"></p>
+      <ul id="import-issues"></ul>
+    </div>
+    <p id="import-status" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+    <div class="buttons dialog-actions"><button id="close-import" type="button" data-t="close"></button></div>
+  </dialog>
+</body>
+</html>

@@ -1,0 +1,14 @@
+subcontractor,trade,contact,job_name,job_start,coi_expiry,request_status,notes
+Example Roofing Co 01,Roofing,,Example Project A,2026-11-21,2026-11-20,Expired-renewal requested,Expiry before job start
+Example Electrical Co 02,Electrical,example02@example.invalid,Example Project B,2026-11-21,2026-11-21,Requested,Same-day start and expiry
+Example Plumbing Co 03,Plumbing,,Example Project C,2026-12-21,2026-12-21,Not requested,Thirty days from fixture reference date
+Example Concrete Co 04,Concrete,,Example Project D,2026-12-22,2026-12-22,Received,One day beyond the thirty-day window
+Example Painting Co 05,Painting,,Example Project E,2026-11-22,,Requested,Missing expiry
+Example Flooring Co 06,Flooring,,Example Project F,,2026-12-08,Received,Missing job start
+Example Drywall Co 07,Drywall,,Example Project G,2026-12-03,2026-11-31,Requested,Invalid expiry
+Example Masonry Co 08,Masonry,,Example Project H,2027-02-29,2028-02-29,Not requested,Invalid start and valid leap-day expiry
+Example Framing Co 09,Framing,,Example Project I,2027-03-15,2027-03-14,Received,Dates across spring daylight saving change
+Example HVAC Co 10,HVAC,,Example Project J,2026-11-20,2026-12-20,Not requested,Job already started
+Example Glazing Co 11,Glazing,example11@example.invalid,"Example Project K, Phase 2",2026-12-01,2027-03-01,Received,"Verify ""Phase 2"" reference
+Synthetic multiline note"
+Example Sitework Co 12,Sitework,,Example Project L,,,Not requested,Both dates missing
