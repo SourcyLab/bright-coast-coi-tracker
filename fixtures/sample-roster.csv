@@ -1,6 +1,6 @@
 subcontractor,trade,contact,job_name,job_start,coi_expiry,request_status,notes
 Example Roofing Co 01,Roofing,,Example Project A,2026-11-21,2026-11-20,Expired-renewal requested,Expiry before job start
-Example Electrical Co 02,Electrical,example02@example.invalid,Example Project B,2026-11-21,2026-11-21,Requested,Same-day start and expiry
+Example Electrical Co 02,Electrical,example02@example.invalid,Example Project B,2026-11-21,2026-11-21,Requested,Start date equals expiry date (boundary case)
 Example Plumbing Co 03,Plumbing,,Example Project C,2026-12-21,2026-12-21,Not requested,Thirty days from fixture reference date
 Example Concrete Co 04,Concrete,,Example Project D,2026-12-22,2026-12-22,Received,One day beyond the thirty-day window
 Example Painting Co 05,Painting,,Example Project E,2026-11-22,,Requested,Missing expiry
